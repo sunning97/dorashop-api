@@ -19,8 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('l_name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('address');
-            $table->string('phone');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->enum('gender',['M','F'])->default('M');
             $table->enum('is_active',['T','F'])->daefault('F');
             $table->string('avatar')->default('user_default.png');

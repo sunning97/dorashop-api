@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\ActivationService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,13 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public $activationService;
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ActivationService $activationService)
     {
+        $this->activationService = $activationService;
         $this->middleware('jwt', ['except' => ['login','register']]);
     }
 
@@ -47,9 +50,27 @@ class AuthController extends Controller
         if($this->checkEmail($credential['email'])){
             return response()->json(['message' => 'email is used'],401);
         }
-        return response()->json(['message' => 'ok'],200);
+
+        $user = User::create([
+            'f_name' => $credential['f_name'],
+            'l_name' => $credential['l_name'],
+            'email' => $credential['email'],
+            'password' => bcrypt($credential['password']),
+        ]);
+        if($user){
+            return ($this->activationService->sendActivationMail($user)) ?
+                $this->responseRegisterSuccess() :
+                $this->responseRegisterFaile();
+        }
     }
 
+    private function responseRegisterSuccess(){
+        return response()->json(['message'=>'register success'],200);
+    }
+
+    private function responseRegisterFaile(){
+        return response()->json(['message' => 'register failed'],404);
+    }
     private function checkEmail($email){
         return (User::where('email',$email)->first()) ? true : false;
     }

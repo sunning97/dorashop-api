@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('user-activation/{token}','Web\ActivationController@index')->name('activation');

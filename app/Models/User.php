@@ -12,9 +12,9 @@ class User extends Authenticatable implements JWTSubject
 
     protected $table='users';
 
-    protected $fillable=['f_name','l_name','email','address','gender','is_active','phone'];
+    protected $fillable=['f_name','l_name','password','email','address','gender','is_active','phone'];
 
-    protected $hidden=['password','remember_token'];
+    protected $hidden=['remember_token'];
 
     public $timestamps=true;
 
