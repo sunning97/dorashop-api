@@ -31,8 +31,7 @@ class ActivationService
         $token = $this->userActivation->createActivation($user);
         $user->activation_url = route('activation',$token);
         $mail = new UserActivationMail($user);
-        if(Mail::to($user->email)->send($mail)) return true;
-        return false;
+        Mail::to($user->email)->send($mail);
     }
 
     public function activateUser($token){

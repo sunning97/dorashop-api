@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->enum('gender',['M','F'])->default('M');
-            $table->enum('is_active',['T','F'])->daefault('F');
+            $table->enum('is_active',['T','F'])->default('F');
             $table->string('avatar')->default('user_default.png');
             $table->rememberToken();
             $table->timestamps();

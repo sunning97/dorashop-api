@@ -58,10 +58,10 @@ class AuthController extends Controller
             'password' => bcrypt($credential['password']),
         ]);
         if($user){
-            return ($this->activationService->sendActivationMail($user)) ?
-                $this->responseRegisterSuccess() :
-                $this->responseRegisterFaile();
+            $this->activationService->sendActivationMail($user);
         }
+
+        return $this->responseRegisterSuccess();
     }
 
     private function responseRegisterSuccess(){
