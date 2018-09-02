@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt', ['except' => ['login']]);
+        $this->middleware('jwt', ['except' => ['login','register']]);
     }
 
     /**
@@ -34,6 +35,24 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    /**
+     * Register new User
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function register(){
+        $credential = request(['email','password','f_name','l_name']);
+
+        if($this->checkEmail($credential['email'])){
+            return response()->json(['message' => 'email is used'],401);
+        }
+        return response()->json(['message' => 'ok'],200);
+    }
+
+    private function checkEmail($email){
+        return (User::where('email',$email)->first()) ? true : false;
+    }
     /**
      * Get the authenticated User.
      *
