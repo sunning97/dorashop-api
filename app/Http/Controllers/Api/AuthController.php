@@ -45,6 +45,7 @@ class AuthController extends Controller
      */
 
     public function register(){
+
         $credential = request(['email','password','f_name','l_name']);
 
         if($this->checkEmail($credential['email'])){
@@ -69,7 +70,7 @@ class AuthController extends Controller
     }
 
     private function responseRegisterFaile(){
-        return response()->json(['message' => 'register failed'],404);
+        return response()->json(['message' => 'register failed'],500);
     }
     private function checkEmail($email){
         return (User::where('email',$email)->first()) ? true : false;
